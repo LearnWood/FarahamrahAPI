@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>فرم تست API پیشنهاد متریال فراهمراه</title>
+</head>
+<body style="font-family: Tahoma; direction: rtl;">
+  <h2><strong>فرم تست <span style="color: darkblue;">API</span> پیشنهاد متریال</strong></h2>
+  <form id="recommendationForm">
+    نوع فضا:<br><input type="text" name="spaceType" value="آشپزخانه"><br>
+    بودجه:<br><input type="text" name="budget" value="متوسط"><br>
+    تیپ شخصیتی:<br><input type="text" name="mbtiType" value="INFJ"><br>
+    سبک ترجیحی:<br><input type="text" name="style" value="مدرن"><br>
+    منطقه:<br><input type="text" name="region" value="هرمزگان"><br><br>
+    <button type="submit">ارسال درخواست</button>
+  </form>
+  <pre id="result" style="margin-top: 20px; background: #eee; padding: 10px;"></pre>
+
+  <script>
+    document.getElementById('recommendationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const response = await fetch('/api/materials/recommend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        document.getElementById('result').textContent = 'خطا در دریافت پاسخ';
+      }
+    });
+  </script>
+</body>
+</html>
